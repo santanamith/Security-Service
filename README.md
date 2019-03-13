@@ -10,3 +10,9 @@
     </repository>
 </repositories>
 ```
+```
+https://oss.sonatype.org/#nexus-search;quick~security-service
+
+security-service
+
+```
