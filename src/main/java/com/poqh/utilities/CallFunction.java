@@ -18,12 +18,12 @@ package com.poqh.utilities;
 /**
  *
  * @author Percy Oliver Quispe Huarcaya
- * @param <T>
+ * @param <T> objeto extra
  */
 @FunctionalInterface
 public interface CallFunction<T> {
     /**
-     * @param t
+     * @param t funcionalidad extra
      * @throws Exception 
      */
     void call(T t) throws Exception;

@@ -39,7 +39,7 @@ public class SecurityAlternative {
     * @param f objecto para extender una funcion por ejemplo agregar nuevos datos a la session vigente
     * Implentacion
     * LoginFunction f = new Functions.LoginFunction() {
-    *        @Override
+    *        -@Override
     *        public void call(JSONObject json1, JSONObject json2,HttpSession session) throws Exception {
     *            //hacer lo que quieras
     *        }
@@ -140,7 +140,7 @@ public class SecurityAlternative {
     * @throws java.io.IOException   excepcion propia del servlet
     * Implentacion
     * LoginFunction f = new Functions.LoginFunction() {
-    *        @Override
+    *        -@Override
     *        public void call(JSONObject json1, JSONObject json2,HttpSession session) throws Exception {
     *            //hacer lo que quieras
     *        }

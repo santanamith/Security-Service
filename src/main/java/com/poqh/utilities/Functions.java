@@ -26,9 +26,9 @@ public  class Functions {
     @FunctionalInterface
     public static interface LoginFunction {
         /**
-         * @param json1
-         * @param json2
-         * @param session
+         * @param json1 objecto json data
+         * @param json2 objecto json dataPersonal
+         * @param session agregar mas sesiones
          * @throws Exception 
          */
         void call(JSONObject json1,JSONObject json2,HttpSession session) throws Exception;
