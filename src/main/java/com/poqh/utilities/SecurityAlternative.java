@@ -32,6 +32,20 @@ import org.json.JSONObject;
  * @author Percy Oliver Quispe Huarcaya
  */
 public class SecurityAlternative {
+    /**
+    * alternativa para el login
+    * @param request
+    * @param response
+    * @param f
+    * Implentacion
+    * LoginFunction f = new Functions.LoginFunction() {
+    *        @Override
+    *        public void call(JSONObject json1, JSONObject json2,HttpSession session) throws Exception {
+    *            //hacer lo que quieras
+    *        }
+    *    };
+    *    s.login(request, response, f);
+    */
     public void login(HttpServletRequest request, HttpServletResponse response,Functions.LoginFunction f) {
         String body = request.getParameter("body");
         if (body != null) {
@@ -118,7 +132,21 @@ public class SecurityAlternative {
             request.getRequestDispatcher("/vistas/index.jsp").forward(request, response);
         }
     }
-
+    /**
+    * alternativa para redireccionar
+    * @param request
+    * @param response
+    * @param f
+    * Implentacion
+    * LoginFunction f = new Functions.LoginFunction() {
+    
+    *        @Override
+    *        public void call(JSONObject json1, JSONObject json2,HttpSession session) throws Exception {
+    *            //hacer lo que quieras
+    *        }
+    *    };
+    *    s.redireccionar(request, response, f);
+    */
     public void redireccionar(HttpServletRequest request, HttpServletResponse response, Functions.LoginFunction f) throws IOException, Exception  {
         if (request.getParameter("t") != null && request.getParameter("cp") != null) {
             String auth = request.getParameter("t");
