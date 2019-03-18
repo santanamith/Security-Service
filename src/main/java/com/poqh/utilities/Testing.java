@@ -16,7 +16,12 @@
 package com.poqh.utilities;
 
 import com.poqh.config.RequestPath;
+import com.poqh.utilities.Functions.LoginFunction;
 import java.io.IOException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -31,6 +36,33 @@ public class Testing {
         obj.put("pass", "123456");
         obj.put("codigoProyecto", "1");
         String r = httpRequest.getRespuesta(RequestPath.LOGIN, HttpRequest.POST, obj, "");//Respuesta del server
+        JSONObject respuesta = new JSONObject(r);
+        JSONObject data = new JSONObject(respuesta.get("data").toString());
+        JSONObject dataPersonal = new JSONObject(respuesta.get("dataPersonal").toString());
+        String nombre = data.getString("nombrePersona") + " " + data.getString("apellidoPaterno");
+        JSONArray datosUsuario = dataPersonal.getJSONArray("datosUsuario");
+        String roles = "";
+        String codigo = "";
+        String codigoTipoUsuario = "";
+        for (int i = 0; i < datosUsuario.length(); i++) {
+            JSONObject usuario = (JSONObject) datosUsuario.get(i);
+            roles += usuario.getString("nombreTipoUsuario") + " - ";
+            codigoTipoUsuario += usuario.getString("codigoTipoUsuario")+",";
+            codigo = usuario.getString("codigoUsuario");
+        }
+        System.out.println(codigoTipoUsuario.substring(0,codigoTipoUsuario.length()-1));
+        System.out.println(roles);
+        System.out.println(codigo);
         System.out.println(r);
+        SecurityAlternative s = new SecurityAlternative();
+        HttpServletRequest request = null;
+        HttpServletResponse response = null;
+        LoginFunction f = new Functions.LoginFunction() {
+            @Override
+            public void call(JSONObject json1, JSONObject json2,HttpSession session) throws Exception {
+                
+            }
+        };
+        s.login(request, response, f);
     }
 }

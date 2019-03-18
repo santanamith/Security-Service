@@ -13,18 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.poqh.servlets;
+package com.poqh.utilities;
 
 import com.poqh.config.RequestPath;
-import com.poqh.utilities.GeneralMethods;
-import com.poqh.utilities.HttpRequest;
-import com.poqh.utilities.ResponseHelper;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -35,33 +31,8 @@ import org.json.JSONObject;
  *
  * @author Percy Oliver Quispe Huarcaya
  */
-public class SecurityServlet extends HttpServlet {
-
-    @Override
-    protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String ruta = request.getServletPath();
-        if (request.getMethod().equalsIgnoreCase("POST")) {
-            switch (ruta) {
-                case "/vistas/login":
-                    login(request, response);
-                    break;
-                case "/vistas/interceptar":
-                    interceptar(request, response);
-                    break;
-                case "/vistas/logout":
-                    logout(request, response);
-                    break;
-                case "/vistas/redireccionarServlet":
-                    redireccionar(request, response);
-                    break;
-                case "/servlet/authServlet":
-                    auth(request, response);
-                    break;
-            }
-        }
-    }
-
-    private void login(HttpServletRequest request, HttpServletResponse response) {
+public class SecurityAlternative {
+    public void login(HttpServletRequest request, HttpServletResponse response,Functions.LoginFunction f) {
         String body = request.getParameter("body");
         if (body != null) {
             ResponseHelper responseHelper = new ResponseHelper();
@@ -91,6 +62,9 @@ public class SecurityServlet extends HttpServlet {
                     }
                     /*Sesionando credenciales requeridas*/
                     HttpSession session = request.getSession();
+                    if(f!=null){
+                        f.call(data, dataPersonal,session);
+                    }
                     session.setAttribute("usuario", obj.getString("usuario"));
                     session.setAttribute("codigo", codigo);
                     session.setAttribute("nombre", nombre);
@@ -116,7 +90,7 @@ public class SecurityServlet extends HttpServlet {
         }
     }
 
-    private void interceptar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void interceptar(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession();
         if (session.getAttribute("codigo") != null && session.getAttribute("Authorization") != null) {
             String token = (String) session.getAttribute("Authorization");
@@ -129,7 +103,7 @@ public class SecurityServlet extends HttpServlet {
         }
     }
 
-    private void logout(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException, ServletException {
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, IOException, ServletException {
         if (request.getSession().getAttribute("codigo") != null && !request.getSession().getAttribute("codigo").toString().trim().equals("")) {
             HttpSession session = request.getSession();
             String authorization = (String) session.getAttribute("Authorization");
@@ -145,7 +119,7 @@ public class SecurityServlet extends HttpServlet {
         }
     }
 
-    private void redireccionar(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void redireccionar(HttpServletRequest request, HttpServletResponse response, Functions.LoginFunction f) throws IOException, Exception  {
         if (request.getParameter("t") != null && request.getParameter("cp") != null) {
             String auth = request.getParameter("t");
             if (auth.startsWith("Bearer ")) {
@@ -164,18 +138,18 @@ public class SecurityServlet extends HttpServlet {
                     String roles = "";
                     String codigo = "";
                     String user = "";
-                    String codigoTipoUsuario = "";
                     for (int i = 0; i < datosUsuario.length(); i++) {
                         JSONObject usuario = (JSONObject) datosUsuario.get(i);
                         roles += usuario.getString("nombreTipoUsuario") + " - ";
                         codigo = usuario.getString("codigoUsuario");
-                        codigoTipoUsuario += usuario.getString("codigoTipoUsuario")+",";
                         user = usuario.getString("usuario");
+                    }
+                    if(f!=null){
+                        f.call(data, dataPersonal,session);
                     }
                     session.setAttribute("usuario", user);
                     session.setAttribute("codigo", codigo);
                     session.setAttribute("nombre", nombre);
-                    session.setAttribute("codigoTipoUsuario", codigoTipoUsuario.substring(0,codigoTipoUsuario.length()-1));
                     session.setAttribute("roles", roles.substring(0, roles.length() - 2));
                     session.setAttribute("Authorization", "Bearer " + respuesta.getString("token"));
                     session.setMaxInactiveInterval(120 * 60);
@@ -193,7 +167,7 @@ public class SecurityServlet extends HttpServlet {
         request.getRequestDispatcher("/vistas/index.jsp").forward(request, response);
     }
 
-    private void auth(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void auth(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json");
         String authorization = (String) request.getSession().getAttribute("Authorization");
         JSONObject auth = new JSONObject();
@@ -203,3 +177,4 @@ public class SecurityServlet extends HttpServlet {
         pw.print(auth);
     }
 }
+
