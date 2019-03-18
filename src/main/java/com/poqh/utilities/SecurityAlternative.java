@@ -34,9 +34,9 @@ import org.json.JSONObject;
 public class SecurityAlternative {
     /**
     * alternativa para el login
-    * @param request
-    * @param response
-    * @param f
+    * @param request para obtener los datos provenientes de la peticion http
+    * @param response http response
+    * @param f objecto para extender una funcion por ejemplo agregar nuevos datos a la session vigente
     * Implentacion
     * LoginFunction f = new Functions.LoginFunction() {
     *        @Override
@@ -134,12 +134,13 @@ public class SecurityAlternative {
     }
     /**
     * alternativa para redireccionar
-    * @param request
-    * @param response
-    * @param f
+    * @param request para obtener los datos provenientes de la peticion http
+    * @param response http response
+    * @param f objecto para extender una funcion por ejemplo agregar nuevos datos a la session vigente
+    * @throws java.io.IOException   excepcion propia del servlet
     * Implentacion
     * LoginFunction f = new Functions.LoginFunction() {
-    
+     
     *        @Override
     *        public void call(JSONObject json1, JSONObject json2,HttpSession session) throws Exception {
     *            //hacer lo que quieras
