@@ -31,7 +31,8 @@ import org.json.JSONObject;
  *
  * @author Percy Oliver Quispe Huarcaya
  */
-public class SecurityAlternative {
+public final class SecurityAlternative {
+    
     /**
     * alternativa para el login
     * @param request para obtener los datos provenientes de la peticion http

@@ -37,7 +37,7 @@ import org.json.JSONObject;
  *
  * @author Percy Oliver Quispe Huarcaya
  */
-public class RequestsFilter {
+public final class RequestsFilter {
     public void doBeforeProcessing(ServletRequest req, ServletResponse resp, FilterChain chain,CallFunction<List> funcion)
             throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;

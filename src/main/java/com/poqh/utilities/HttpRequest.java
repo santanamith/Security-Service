@@ -19,7 +19,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -61,22 +60,16 @@ public final class HttpRequest {
         String respuesta = "";
         URL url = getConn(path);
         HttpURLConnection conn = setDefaultValues(url, requestMethod, authorization);
-        OutputStream os = conn.getOutputStream();
-        os.write(obj.toString().getBytes("UTF-8"));
-        BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));
-        String linea;
-        while ((linea = rd.readLine()) != null) {
-            respuesta += linea;
+        try(OutputStream os = conn.getOutputStream();){
+            os.write(obj.toString().getBytes("UTF-8"));
+            try( BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream(), "UTF-8"));){
+                String linea;
+                while ((linea = rd.readLine()) != null) {
+                    respuesta += linea;
+                }
+            }
         }
-        if (os != null) {
-            os.close();
-        }
-        if (rd != null) {
-            rd.close();
-        }
-        if (conn != null) {
-            conn.disconnect();
-        }
+        conn.disconnect();
         return respuesta;
     }
 }
