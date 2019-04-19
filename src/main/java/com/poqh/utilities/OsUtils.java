@@ -115,7 +115,7 @@ public final class OsUtils {
                 }
                 break;
             case "Linux":
-                path = "/opt/dotenv/comprobantes";
+                path = "/opt/dotenv/"+projectName;
                 break;
         }
         return path;
